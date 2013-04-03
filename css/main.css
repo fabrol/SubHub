@@ -21,6 +21,7 @@ textarea {
 body {
     font-size: 1em;
     line-height: 1.4;
+    background-color: #FFFFCC;
 }
 
 /*
@@ -92,12 +93,13 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-.Background{margin:50px auto;
+.Background{
+    margin:30px auto;
 	background-color:#EFF8FB;
-	height:900px;
+	height:850px;
 	width:1000px;
 	border-style:solid;
-	border-color:#BDBDBD;
+	border-color:#3562A3;
 	border-width:2px;
 }
 .userInformationBox {
@@ -106,7 +108,7 @@ textarea {
 	height:50px;
 	width:550px;
 	border-style:solid;
-	border-color:#BDBDBD;
+	border-color:#3562A3;
 	border-width:2px;
 }
 .tabPanel {
@@ -115,7 +117,7 @@ textarea {
 	height:50px;
 	width:957px;
 	border-style:solid;
-	border-color:#BDBDBD;
+	border-color:#3562A3;
 	border-width:2px;
 }
 .timeTable {
@@ -127,7 +129,7 @@ textarea {
 	height:652px;
 	width:957px;
 	border-style:solid;
-	border-color:#BDBDBD;
+	border-color:#3562A3;
 	border-width:2px;
 }
 
