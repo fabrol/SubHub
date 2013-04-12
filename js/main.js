@@ -5,3 +5,7 @@ $(document).ready(function() {
 			openTip.setContent(this.id)
 		});
 });
+$(function() {
+    $( "#tabPanel" ).tabs();
+    $("#timeTable-1").css('.timeTable');
+  });
