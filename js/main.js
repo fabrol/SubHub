@@ -1,7 +1,10 @@
 $(document).ready(function() {
-	$("#NormalShift,#RequestShift,#CoveredShift").each(
-		function() {
-			var openTip = new Opentip(this, {hideDelay:0.0});
-			openTip.setContent(this.id)
-		});
+	$("#RequestShift,#NormalShift,#CoveredShift").powerTip({
+				mouseOnToPopup: true,
+				smartPlacement:true,
+				fadeOutTime:5
+			});
+	$("#RequestShift,#NormalShift,#CoveredShift").data('powertip',function(){
+		return this.id;
+	});
 });
