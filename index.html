@@ -15,6 +15,7 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/opentip.css">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <!-- style tags-->
     </head>
@@ -34,22 +35,25 @@
 
                 </div>
                 <div id="timeTable" class="timeTable"> 
-                    <div id="sample Normal Shift" class="sampleNormalShift">
+                    <div id="NormalShift" class="sampleNormalShift" title="8:00-9:00 Robin" > 8:00-9:00
+                    Robin
                     </div>
-                    <div id="sample Request Shift" class="sampleRequestShift">
+                    <div id="RequestShift" class="sampleRequestShift">
                     </div>
-                    <div id="sample Covered Shift" class="sampleCoveredShift">
+                    <div id="CoveredShift" class="sampleCoveredShift">
                         2:30-3:30
                     </div>
                 </div>
             </div>
         </div>
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+        <p>Date: <input id="datepicker" type="text"></p>
+        
+        <script src="js/jquery-1.9.1.js"></script>
+         <script src="js/jquery-ui.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
-
+        <script src="js/opentip-jquery.min.js"></script>
+        
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];

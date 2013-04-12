@@ -1,3 +1,6 @@
+@import url("jquery-ui.css");
+
+
 /*
  * HTML5 Boilerplate
  *
@@ -152,7 +155,7 @@ textarea {
     border-radius: 5px;
     opacity:0.7;
 }
-.sampleNormalShift:hover {
+/*.sampleNormalShift:hover {
     display: block;
     margin: auto;
     position: relative;
@@ -166,7 +169,7 @@ textarea {
     border-width: 2px;
     border-radius: 5px;
     opacity:0.7;
-}
+}*/
 
 .sampleRequestShift {
     display: block;
@@ -201,12 +204,6 @@ textarea {
     border-radius: 5px;
     opacity: 0.7;
 }
-
-
-
-
-
-
 
 
 
