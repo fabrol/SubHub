@@ -120,7 +120,7 @@ textarea {
 .tabPanel {
 	margin:25px auto 0px;
 	background-color:#E0ECF8;
-	height:50px;
+	height:702px;
 	width:957px;
 	border-style:solid;
 	border-color:#3562A3;
@@ -128,12 +128,13 @@ textarea {
 }
 .timeTable {
 	margin: auto; 
-	background-image:url(../img/Background.png); 
-	background-size:957px 652px;
+	background-image:url(../img/Background.png)!important; 
+	background-size:957px 652px !important;
 	background-repeat:no-repeat;
 	display:block;
 	height:652px;
 	width:957px;
+    padding:0px !important;
 	border-style:solid;
 	border-color:#3562A3;
 	border-width:2px;
