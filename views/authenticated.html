@@ -1,7 +1,6 @@
 {% extends "main.html" %}
 
 {% block maincontent %}
-
 <h1>Congratulations {{ user.name }}!</h1>
 <p>If you see this page, it means that you managed to log in successfully.</p>
         <!--[if lt IE 7]>
@@ -39,7 +38,20 @@
                         <div id="Fri" class="dayItem Fri"></div>
                         <div id="Sat" class="dayItem Sat"></div>
                         <div id="Sun" class="dayItem Sun"></div>
-                        <div id="sevenAM" class="hourItem sevenAM"></div>
+
+                         {% for number in range(7,11) %}
+                            <div id="{{ number }}AM" class="{{ number }}AM">
+                            <div id="{{ number }}30AM" class="{{ number }}AM">
+                        {% endfor %}
+                        <div id="twelvePM" class="hourItem twelvePM"></div>
+                        <div id="twelvethirtyPM" class="hourItem twelvethirtyPM"></div>
+                        {% range number from 1 to 11 %}
+                            <div id="{{ number }}AM" class="{{ number  }}AM">
+                            <div id="{{ number }}30AM" class="{{ number }}AM">
+                        {% endrange %}
+                        <div id="12AM" class="hourItem 12M"></div>
+                        <div id="1230AM" class="hourItem 1230AM"></div> 
+<!--                         <div id="sevenAM" class="hourItem sevenAM"></div>
                         <div id="seventhirtyAM" class="hourItem seventhirtyAM"></div>
                         <div id="eightAM" class="hourItem eightAM"></div>
                         <div id="eightthirtyAM" class="hourItem eightthirtyAM"></div>
@@ -52,8 +64,7 @@
                         <div id="twelvePM" class="hourItem twelvePM"></div>
                         <div id="twelvethirtyPM" class="hourItem twelvethirtyPM"></div>
                         <div id="onePM" class="hourItem onePM"></div>
-                        <div id="onethirtyPM" class="hourItem onethirtyPM"></div>
-                        
+                        <div id="onethirtyPM" class="hourItem onethirtyPM"></div>  
                         <div id="twoPM" class="hourItem twoPM"></div>
                         <div id="twothirtyPM" class="hourItem twothirtyPM"></div>
                         <div id="threePM" class="hourItem threePM"></div>
@@ -76,7 +87,7 @@
                         <div id="eleventhirtyPM" class="hourItem eleventhirtyPM"></div>
                         <div id="twelveAM" class="hourItem twelveAM"></div>
                         <div id="twelvethirtyAM" class="hourItem twelvethirtyAM"></div>
-                </div>
+                </div> -->
                 </div>
             </div>
 
