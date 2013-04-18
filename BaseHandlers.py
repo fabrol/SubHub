@@ -258,6 +258,7 @@ class LogoutHandler(BaseHandler):
 
 class AuthenticatedHandler(BaseHandler):
   @user_required
-  def get(self):
-    self.render_template('authenticated.html')
+  def get(self):  
+			self.render_template('authenticated.html',params={'range':range(1,11)})
+
 
