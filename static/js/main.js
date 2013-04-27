@@ -1,4 +1,6 @@
 $(function() {
+
+  //Add the tooltips to the shifts
 	$("#RequestShift,#NormalShift,#CoveredShift").powerTip({
 				mouseOnToPopup: true,
 				smartPlacement:true,
@@ -7,8 +9,12 @@ $(function() {
 	$("#RequestShift,#NormalShift,#CoveredShift").data('powertip',function(){
 		return this.id;
 	});
+
+  //Add the tabs
     $( "#tabPanel" ).tabs();
     $("#timeTable-1").css('.timeTable');
+
+  //create the grid elements
 	for (var i = 7; i < 12; i++){
 		var selector = "<div class='hourItem time"+i+"AM'></div>";
 		$("#grid").append(selector);
@@ -29,4 +35,9 @@ $(function() {
 	$("#grid").append(selector);
 	var selector = "<div class='hourItem time1230AM'></div>";
 	$("#grid").append(selector);
+
+  $.getJSON('getshifts', function(data){
+    console.log(data.shifts[0].duration)
+  });
+
 });

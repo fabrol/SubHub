@@ -14,8 +14,10 @@ from webapp2_extras.auth import InvalidPasswordError
 from models import *
 from BaseHandlers import *
 
-'''Write all the custom handlers here'''
 
+'''
+Function to serialize arbitrary objects to their json representation
+'''
 def json_object_serializer(obj):
   if hasattr(obj, 'isoformat'):
     return obj.isoformat()
@@ -41,5 +43,5 @@ class GetShiftsHandler(BaseHandler):
       shifts.append(vals)
     result = {'shifts': shifts}
     response=json.dumps(result, default=json_object_serializer)
-    self.response.headers.add_header('content-type', 'application/json', charset='utf-8')
+    #self.response.headers.add_header('content-type', 'application/json', charset='utf-8')
     self.response.out.write(response)
