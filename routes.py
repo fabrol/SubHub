@@ -11,7 +11,7 @@ _routes = [
     RedirectRoute('/logout', BaseHandlers.LogoutHandler, name='logout',strict_slash=True),
     RedirectRoute('/forgot', BaseHandlers.ForgotPasswordHandler, name='forgot',strict_slash=True),
     RedirectRoute('/authenticated', BaseHandlers.AuthenticatedHandler, name='authenticated',strict_slash=True),
-    RedirectRoute('/getshifts', BaseHandlers.GetShiftsHandler, name='getshifts',strict_slash=True)
+    RedirectRoute('/getshifts', handlers.GetShiftsHandler, name='getshifts',strict_slash=True)
 ]
 def get_routes():
 	return _routes

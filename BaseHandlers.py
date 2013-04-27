@@ -261,11 +261,3 @@ class AuthenticatedHandler(BaseHandler):
   @user_required
   def get(self):  
 			self.render_template('authenticated.html')
-
-class GetShiftsHandler(BaseHandler):
-  @user_required
-  def get(self):
-    s = Shift.query()
-    params = {'shifts':s}
-    self.response.out.write(params)
-
