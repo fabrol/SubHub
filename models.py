@@ -3,9 +3,15 @@ import webapp2_extras.appengine.auth.models
 
 from google.appengine.ext import ndb
 
+
 from webapp2_extras import security
 
 class User(webapp2_extras.appengine.auth.models.User):
+    user_name = ndb.StringProperty()
+    email = ndb.StringProperty(required=True)
+    name = ndb.StringProperty()
+    last_name = ndb.StringProperty()
+
   def set_password(self, raw_password):
     """Sets the password for the current user
 
@@ -35,3 +41,10 @@ class User(webapp2_extras.appengine.auth.models.User):
         return user, timestamp
 
     return None, None
+
+class Shift(ndb.Model):
+    datetime = ndb.DateTimeProperty(required=True, auto_now=True, auto_now_add=False)
+    user = ndb.KeyProperty(kind=User, required=True)
+    sub = ndb.StringProperty()
+    duration = ndb.IntegerProperty(required=True)
+    status = ndb.StringProperty(required=True)

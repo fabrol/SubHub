@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(function() {
 	$("#RequestShift,#NormalShift,#CoveredShift").powerTip({
 				mouseOnToPopup: true,
 				smartPlacement:true,
