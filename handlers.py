@@ -23,17 +23,21 @@ def json_object_serializer(obj):
     raise TypeError(('Object of type {0} with value of {1} is ' 'not JSON serializable').format(type(obj), repr(obj)))
 
 class GetShiftsHandler(BaseHandler):
+  '''
+  Returns a shifts attribute with a list of all shifts in the database as a json object
+  '''
   @user_required
   def get(self):
     s = Shift.query()
-    # SEND BACK THE USER AS WELL. NOT THE OBJECT BUT INSTEAD THE ACTUAL VALUES OF THE PROPERTIES OF THE USER ASSOCIATED WITH EACH USER
     shifts = []
     for shift in s:
+      user = shift.user.get().to_dict()
       vals = {}
       vals['datetime']=shift.datetime
       vals['sub']=shift.sub
       vals['duration']=shift.duration
       vals['status']=shift.status
+      vals['user']=user
       shifts.append(vals)
     result = {'shifts': shifts}
     response=json.dumps(result, default=json_object_serializer)
