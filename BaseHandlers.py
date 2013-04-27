@@ -10,6 +10,7 @@ from webapp2_extras import sessions
 
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
+from models import *
 
 def user_required(handler):
   """
@@ -259,6 +260,12 @@ class LogoutHandler(BaseHandler):
 class AuthenticatedHandler(BaseHandler):
   @user_required
   def get(self):  
-			self.render_template('authenticated.html',params={'range':range(1,11)})
+			self.render_template('authenticated.html')
 
+class GetShiftsHandler(BaseHandler):
+  @user_required
+  def get(self):
+    s = Shift.query()
+    params = {'shifts':s}
+    self.response.out.write(params)
 
