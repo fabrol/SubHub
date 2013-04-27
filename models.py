@@ -7,10 +7,10 @@ from google.appengine.ext import ndb
 from webapp2_extras import security
 
 class User(webapp2_extras.appengine.auth.models.User):
-    user_name = ndb.StringProperty()
-    email = ndb.StringProperty(required=True)
-    name = ndb.StringProperty()
-    last_name = ndb.StringProperty()
+  user_name = ndb.StringProperty()
+  email_address = ndb.StringProperty(required=True)
+  name = ndb.StringProperty()
+  last_name = ndb.StringProperty()
 
   def set_password(self, raw_password):
     """Sets the password for the current user
