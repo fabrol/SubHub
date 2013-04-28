@@ -1,7 +1,4 @@
-console.log("haha");
 $(document).ready(function() {
-	console.log("haha");
-
 
   //Add the tooltips to the shifts
     $("#RequestShift,#NormalShift,#CoveredShift").powerTip({
@@ -24,20 +21,18 @@ $(document).ready(function() {
 		var selector = "<div class='hourItem time"+i+"30'></div>";
 		$("#grid").append(selector);
 	}
-console.log("haha");
-
 
   $.getJSON('getshifts', function(data){
-  		for (var shift in data.shifts) {
-  			var user = shift.user;
-  			var sub = shift.sub;
-  			var status = shift.status;
-  			var duration = shift.duration*18;
+  		$.each(data.shifts, function(index, shift){
+        var user = shift.user;
+        var sub = shift.sub;
+        var status = shift.status;
+        var duration = shift.duration*18;
               
-  			var datetime = new Date(Date.parse(shift.datetime));
-            var day = datetime.getDay();
-            var day_text;
-            switch(day){
+        var datetime = new Date(Date.parse(shift.datetime));
+        var day = datetime.getDay();
+        var day_text;
+        switch(day){
                 case 0: day_text = "SUN";break;
                 case 1: day_text = "MON";break;
                 case 2: day_text = "TUE";break;
@@ -46,10 +41,10 @@ console.log("haha");
                 case 5: day_text = "FRI";break;
                 case 6: day_text = "SAT";break;
             }
-            var hour = datetime.getHours();
-  			var selector = "<div class='" + day + " time"+ hour + " style='height: " + duration + "px;'></div>";
-			$("#grid").append(selector);
-  		}
-    	
+        var hour = datetime.getHours();
+        var selector = "<div class=\'" + day + " time"+ hour + " style='height: " + duration + "px;\'></div>";
+        $("#grid").append(selector);
+      });
   });
+
 });
