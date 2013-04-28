@@ -127,6 +127,7 @@ textarea {
     border-width:2px;
 }
 .timeTable {
+    position: absolute;
     margin: auto; 
     background-image:url(../img/Background.png)!important; 
     background-size:957px 652px !important;
@@ -192,148 +193,157 @@ textarea {
 }
 
 .dayItem {
-    top: 106px;
+    top: 56px;
     position: absolute;
     height:594px;
-    width:127px;
     border-width:3px;
     border-radius:10px;
 }
 .Mon {
-    left: 54px;
+    width:127px;
+    left: 52px;
 }
 .Tue {
-    left:184px;
+    left:181px;
+    width:127px;
 }
 .Wed {
-    left:314px;
+    left:310px;
+    width:127px;
+
 }
 .Thu {
-    left:442px;
+    left:439px;
+    width:127px;
 }
 
 .Fri {
-    left:572px;
+    left:568px;
+    width:127px;
 }
 .Sat {
-    left:700px;
+    left:698px;
+    width:127px;
 }
 .Sun {
     left:829px;
+    width:124px;
 }
 
 .hourItem {
-    position: absolute;
-    left: 54px;
+    left: 52px;
     height:2px;
+    position: absolute;
     width: 904px;
     border-width:3px;
     border-radius:10px;
+    padding: none;
 }
-.time7AM {
-    top: 105px;
+.time7 {
+    top: 53px;
 }
-.time730AM {
-    top: 123px;
+.time730{
+    top: 71px;
 }
-.time8AM {
-    top: 140px;
+.time8 {
+    top: 88px;
 }
-.time830AM {
-    top: 158px;
+.time830 {
+    top: 106px;
 }
-.time9AM {
+.time9 {
+    top: 125px;
+}
+.time930 {
+    top: 142px;
+}
+.time10 {
+    top: 160px;
+}
+.time1030 {
     top: 177px;
 }
-.time930AM {
-    top: 194px;
+.time11 {
+    top: 195px;
 }
-.time10AM {
+.time1130 {
     top: 212px;
 }
-.time1030AM {
-    top: 229px;
+.time12 {
+    top: 230px;
 }
-.time11AM {
+.time1230 {
     top: 247px;
 }
-.time1130AM {
+.time13 {
     top: 264px;
 }
-.time12PM {
+.time1330 {
     top: 282px;
 }
-.time1230PM {
+.time14 {
     top: 299px;
 }
-.time1PM {
-    top: 316px;
+.time1430 {
+    top: 317px;
 }
-.time130PM {
+.time15 {
     top: 334px;
 }
-.time2PM {
-    top: 351px;
+.time1530 {
+    top: 352px;
 }
-.time230PM {
-    top: 369px;
+.time16 {
+    top: 370px;
 }
-.time3PM {
-    top: 386px;
+.time1630 {
+    top: 387px;
 }
-.time330PM {
-    top: 404px;
+.time17 {
+    top: 405px;
 }
-.time4PM {
+.time1730 {
     top: 422px;
 }
-.time430PM {
+.time18 {
     top: 439px;
 }
-.time5PM {
+.time1830 {
     top: 456px;
 }
-.time530PM {
-    top: 474px;
+.time19 {
+    top: 475px;
 }
-.time6PM {
+
+.time1930 {
     top: 491px;
 }
-.time630PM {
-    top: 508px;
+.time20 {
+    top: 509px;
 }
-.time7PM {
-    top: 527px;
+.time2030 {
+    top: 526px;
 }
-.time730PM {
-    top: 543px;
+.time21 {
+    top: 542px;
 }
-.time8PM {
-    top: 561px;
+.time2130 {
+    top: 562px;
 }
-.time830PM {
-    top: 578px;
+.time22 {
+    top: 579px;
 }
-.time9PM {
+.time2230 {
     top: 596px;
 }
-.time930PM {
+.time23 {
     top: 614px;
 }
-.time10PM {
+.time2330 {
     top: 631px;
 }
-.time1030PM {
+.time24 {
     top: 648px;
-}
-.time11PM {
-    top: 666px;
-}
-.time1130PM {
-    top: 683px;
-}
-.time12AM {
-    top: 700px;
 }
 /* ==========================================================================
    Helper classes
