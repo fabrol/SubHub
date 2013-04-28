@@ -30,7 +30,7 @@ def shifts_to_dict(shifts):
     user = shift.user.get().to_dict()
     vals = {}
     vals['datetime']=shift.datetime
-    vals['sub']=shift.sub
+    vals['sub']=shift.sub.get().to_dict()
     vals['duration']=shift.duration
     vals['status']=shift.status
     vals['user']=user

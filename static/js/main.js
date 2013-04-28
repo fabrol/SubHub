@@ -33,16 +33,16 @@ $(document).ready(function() {
         var day = datetime.getDay();
         var day_text;
         switch(day){
-                case 0: day_text = "SUN";break;
-                case 1: day_text = "MON";break;
-                case 2: day_text = "TUE";break;
-                case 3: day_text = "WED";break;
-                case 4: day_text = "THU";break;
-                case 5: day_text = "FRI";break;
-                case 6: day_text = "SAT";break;
+                case 0: day_text = "Sun";break;
+                case 1: day_text = "Mon";break;
+                case 2: day_text = "Tue";break;
+                case 3: day_text = "Wed";break;
+                case 4: day_text = "Thu";break;
+                case 5: day_text = "Fri";break;
+                case 6: day_text = "Sat";break;
             }
         var hour = datetime.getHours();
-        var selector = "<div class=\'" + day + " time"+ hour + " style='height: " + duration + "px;\'></div>";
+        var selector = "<div class=\'dayItem" + day_text + " hourItem"+ hour + " style='height: " + duration + "px;\'>"+status+"</div>";
         $("#grid").append(selector);
       });
   });
