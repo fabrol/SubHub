@@ -1,5 +1,8 @@
 $(document).ready(function() {
-
+  var myUser;
+  $.getJSON('getuser', function(data){
+    myUser = data.email_address
+  });
   //Add the tooltips to the shifts
   // $("#RequestShift,#NormalShift,#CoveredShift").powerTip({
   //   mouseOnToPopup: true,
@@ -13,7 +16,7 @@ $(document).ready(function() {
   //Add the tabs
     // $( "#tabPanel" ).tabs();
     // $("#timeTable-1").css('.timeTable');
-
+    $( "#tabs" ).tabs();
   //create the grid elements
   for (var i = 7; i < 24; i++){
     var selector = "<div class='hourItem time"+i+"'></div>";
@@ -54,7 +57,7 @@ $(document).ready(function() {
           var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+"</div>";
         }
         else {
-            var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+ "<br>"+ sub.name+"</div>";
+          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+ "<br>"+ "<span style='color:white'> Sub:" + sub.name+ "</span></div>";
         }
       }
       else {
@@ -67,25 +70,29 @@ $(document).ready(function() {
           var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+"</div>";
         }
         else {
-            var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+ "<br>"+ sub.name+"</div>";
+          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+ "<br>"+ "<span style='color:white'> Sub:" + sub.name+ "</span></div>";
         }
 
       }
-      $("#grid").append(selector);
+      $("#grid").append(selector);        
+      if (user.email_address == myUser){
+        $("#timeTable-2").append(selector)
+      }
+
       
 //      console.log($(select).each())
 
-      $(select).powerTip({
-        mouseOnToPopup: true,
-        fadeOutTime:5,
-        placement:'e'
-      });
-      console.log(user);
-      $(select).data('powertip',function(){
+$(select).powerTip({
+  mouseOnToPopup: true,
+  fadeOutTime:5,
+  placement:'e'
+});
+console.log(user);
+$(select).data('powertip',function(){
 
-        return user.name +' ' + user.last_name+' <br>Sub: ' + sub.name + '<br>Hours: ' + hour + ':'+ min + '<br>Status: ' + status;
-      });
-    });
+  return user.name +' ' + user.last_name+' <br>Sub: ' + sub.name + '<br>Hours: ' + hour + ':'+ min + '<br>Status: ' + status;
+});
+});
 });
 
 });

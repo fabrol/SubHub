@@ -38,6 +38,16 @@ def shifts_to_dict(shifts):
   ans = {'shifts': result}
   return ans
 
+class GetCurrentUser(BaseHandler):
+  '''
+  Returns the current user
+  '''
+  @user_required
+  def get(self):
+    user = self.user.to_dict()
+    response = json.dumps(user,default=json_object_serializer)
+    self.response.out.write(response)
+
 class GetShiftsHandler(BaseHandler):
   '''
   Returns a shifts attribute with a list of all shifts in the database as a json object
