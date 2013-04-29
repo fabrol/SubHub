@@ -1,14 +1,14 @@
 $(document).ready(function() {
 
   //Add the tooltips to the shifts
-  $("#RequestShift,#NormalShift,#CoveredShift").powerTip({
-    mouseOnToPopup: true,
-    smartPlacement:true,
-    fadeOutTime:5
-  });
-  $("#RequestShift,#NormalShift,#CoveredShift").data('powertip',function(){
-    return this.id;
-  });
+  // $("#RequestShift,#NormalShift,#CoveredShift").powerTip({
+  //   mouseOnToPopup: true,
+  //   smartPlacement:true,
+  //   fadeOutTime:5
+  // });
+  // $("#RequestShift,#NormalShift,#CoveredShift").data('powertip',function(){
+  //   return this.id;
+  // });
 
   //Add the tabs
     // $( "#tabPanel" ).tabs();
@@ -42,9 +42,35 @@ $(document).ready(function() {
         case 6: day_text = "Sat";break;
       }
       var hour = datetime.getHours() + 4;
-      var select = "div.shift." + status + "." + day_text + ".time"+ hour
-      console.log(select);
-      var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+status+"</div>";
+      var min = datetime.getMinutes();
+
+      if (parseInt(min) == 30) {
+        var select = "div.shift." + status + "." + day_text + ".time"+ hour+"30"
+        console.log(select);
+        if (parseInt(duration) <= 30) {
+          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":"+min+"</div>";
+        }
+        else if (parseInt(duration) > 30 && parseInt(duration) <= 60) {
+          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+"</div>";
+        }
+        else {
+            var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+ "<br>"+ sub.name+"</div>";
+        }
+      }
+      else {
+        var select = "div.shift." + status + "." + day_text + ".time"+ hour
+        console.log(select);
+        if (parseInt(duration) <= 30) {
+          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00</div>";
+        }
+        else if (parseInt(duration) > 30 && parseInt(duration) <= 60) {
+          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+"</div>";
+        }
+        else {
+            var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+ "<br>"+ sub.name+"</div>";
+        }
+
+      }
       $("#grid").append(selector);
       
 //      console.log($(select).each())
@@ -56,7 +82,8 @@ $(document).ready(function() {
       });
       console.log(user);
       $(select).data('powertip',function(){
-        return user.last_name;
+
+        return user.name +' ' + user.last_name+' <br>Sub: ' + sub.name + '<br>Hours: ' + hour + ':'+ min + '<br>Status: ' + status;
       });
     });
 });

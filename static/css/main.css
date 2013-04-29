@@ -108,16 +108,7 @@ textarea {
     border-radius:10px;
 
 }
-.userInformationBox {
-    margin:25px auto 25px;
-    background-color:#E0ECF8;
-    height:50px;
-    width:550px;
-    border-style:solid;
-    border-color:#3562A3;
-    border-width:2px;
-    border-radius:10px;
-}
+
 .tabPanel {
     margin:25px auto 0px;
     background-color:#E0ECF8;
@@ -193,6 +184,9 @@ textarea {
     opacity: 0.7;
 }
 .shift{
+    font-style: bold;
+    font-size: 12px;
+    text-align: center;
     width: 124px;
     display: block;
     margin: auto;
@@ -239,7 +233,7 @@ textarea {
     left:698px;
 }
 .Sun {
-    left:829px;
+    left:826px;
 }
 
 .hourItem {
