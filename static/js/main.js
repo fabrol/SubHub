@@ -42,7 +42,8 @@ $(document).ready(function() {
                 case 6: day_text = "Sat";break;
             }
         var hour = datetime.getHours();
-        var selector = "<div class=\'dayItem" + day_text + " hourItem"+ hour + " style='height: " + duration + "px;\'>"+status+"</div>";
+        console.log(day_text)
+        var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration + "px;\'>"+status+"</div>";
         $("#grid").append(selector);
       });
   });
