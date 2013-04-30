@@ -36,12 +36,12 @@
             <ul class="nav">
               {% if not user %}
                <li class="active"><a href="#">Home</a></li>
+              <li><a href="/signup">Signup</a></li>
                <li><a href="/login">Login</a></li>
               <li> <a href="/logout">Logout</a></li>  
               {% else %}
               <li class="active"><a href="#">Home</a></li>
               <li> <a href="/logout">Logout</a></li> 
-              <li><a href="/signup">Signup</a></li>
               <li><a href="/authenticated">Calendar</a></li>
               <li><a hred="/authenticated">Logged in as: {{ user.name }}!</a></li>
                {% endif %}
