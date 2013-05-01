@@ -68,19 +68,53 @@ $(document).ready(function() {
       if (user.email_address == myUser){
         $("#timeTable-2").append(selector)
       }
-      
-      var $dialog = $('<div></div>')
-        .html('This dialog will show every time!')
-        .dialog({
-          autoOpen: false,
-          modal: true,
-          title: 'Basic Dialog'
-        });
-          
+      if (status == 'normal') { 
+        var $dialog = $('<div></div>')
+          .html('You can ask for a sub here!')
+          .dialog({
+            autoOpen: false,
+            modal: true,
+            title: 'Normal Shift',
+            buttons: {
+              "Request Sub": function() {
+                //send request to server
+              }
+            }
+          });
+      }
+      if (status == 'open') { 
+        var $dialog = $('<div></div>')
+          .html('Do you want to cover this shift?')
+          .dialog({
+            autoOpen: false,
+            modal: true,
+            title: 'Open Shift',
+            buttons: {
+              "Cover Shift": function() {
+                //send request to server
+
+              }
+            }
+          });
+      }
+      if (status == 'closed') { 
+        var $dialog = $('<div></div>')
+          .html('This shift has been covered')
+          .dialog({
+            autoOpen: false,
+            modal: true,
+            title: 'Closed Shift',
+            buttons: {
+              Cancel: function() {
+                $(this).dialog("close");
+              }
+            }
+          });
+      }
         $(select).click(function(){
           $.powerTip.hide();
           $dialog.dialog("open");
-      });
+          });
 
       $(select).powerTip({
         mouseOnToPopup: true,
