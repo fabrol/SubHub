@@ -41,26 +41,26 @@ $(document).ready(function() {
         var select = "div.shift." + status + "." + day_text + ".time"+ hour+"30"
         console.log(select);
         if (parseInt(duration) <= 30) {
-          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":"+min+"</div>";
+          var selector = "<div id='shift' class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":"+min+"</div>";
         }
         else if (parseInt(duration) > 30 && parseInt(duration) <= 60) {
-          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+"</div>";
+          var selector = "<div id='shift' class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+"</div>";
         }
         else {
-          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+ "<br>"+ "<span style='color:white'> Sub:" + sub.name+ "</span></div>";
+          var selector = "<div id='shift' class=\'shift " + status + " " + day_text + " time"+ hour + "30\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + "<br>"+ user.name+ "<br>"+ "<span style='color:white'> Sub:" + sub.name+ "</span></div>";
         }
       }
       else {
         var select = "div.shift." + status + "." + day_text + ".time"+ hour
         console.log(select);
         if (parseInt(duration) <= 30) {
-          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00</div>";
+          var selector = "<div id='shift' class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00</div>";
         }
         else if (parseInt(duration) > 30 && parseInt(duration) <= 60) {
-          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+"</div>";
+          var selector = "<div id='shift' class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+"</div>";
         }
         else {
-          var selector = "<div class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+ "<br>"+ "<span style='color:white'> Sub:" + sub.name+ "</span></div>";
+          var selector = "<div id='shift' class=\'shift " + status + " " + day_text + " time"+ hour + "\' style='height: " + duration_to_height(duration) + "px;\'>"+hour + ":00<br>"+ user.name+ "<br>"+ "<span style='color:white'> Sub:" + sub.name+ "</span></div>";
         }
 
       }
@@ -68,6 +68,12 @@ $(document).ready(function() {
       if (user.email_address == myUser){
         $("#timeTable-2").append(selector)
       }
+      
+      $('#shift').on('click', function(e) {
+  console.log("you clicked on a shift!");
+  //sweet code here
+
+});
 
 $(select).powerTip({
   mouseOnToPopup: true,
