@@ -5,7 +5,7 @@ $(document).ready(function() {
   });
 
   //Add the tabs
-    $( "#tabs" ).tabs();
+  $( "#tabs" ).tabs();
 
   //create the grid elements
   for (var i = 7; i < 24; i++){
@@ -69,23 +69,30 @@ $(document).ready(function() {
         $("#timeTable-2").append(selector)
       }
       
-      $('#shift').on('click', function(e) {
-  console.log("you clicked on a shift!");
-  //sweet code here
+      var $dialog = $('<div></div>')
+        .html('This dialog will show every time!')
+        .dialog({
+          autoOpen: false,
+          modal: true,
+          title: 'Basic Dialog'
+        });
+          
+        $(select).click(function(){
+          $.powerTip.hide();
+          $dialog.dialog("open");
+      });
 
-});
+      $(select).powerTip({
+        mouseOnToPopup: true,
+        fadeOutTime:5,
+        placement:'e'
+      });
+      console.log(user);
+      $(select).data('powertip',function(){
 
-$(select).powerTip({
-  mouseOnToPopup: true,
-  fadeOutTime:5,
-  placement:'e'
-});
-console.log(user);
-$(select).data('powertip',function(){
-
-  return user.name +' ' + user.last_name+' <br>Sub: ' + sub.name + '<br>Hours: ' + hour + ':'+ min + '<br>Status: ' + status;
-});
-});
+        return user.name +' ' + user.last_name+' <br>Sub: ' + sub.name + '<br>Hours: ' + hour + ':'+ min + '<br>Status: ' + status;
+      });
+    });
 });
 
 });
