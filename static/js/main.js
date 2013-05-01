@@ -3,20 +3,10 @@ $(document).ready(function() {
   $.getJSON('getuser', function(data){
     myUser = data.email_address
   });
-  //Add the tooltips to the shifts
-  // $("#RequestShift,#NormalShift,#CoveredShift").powerTip({
-  //   mouseOnToPopup: true,
-  //   smartPlacement:true,
-  //   fadeOutTime:5
-  // });
-  // $("#RequestShift,#NormalShift,#CoveredShift").data('powertip',function(){
-  //   return this.id;
-  // });
 
   //Add the tabs
-    // $( "#tabPanel" ).tabs();
-    // $("#timeTable-1").css('.timeTable');
     $( "#tabs" ).tabs();
+
   //create the grid elements
   for (var i = 7; i < 24; i++){
     var selector = "<div class='hourItem time"+i+"'></div>";
@@ -79,9 +69,6 @@ $(document).ready(function() {
         $("#timeTable-2").append(selector)
       }
 
-      
-//      console.log($(select).each())
-
 $(select).powerTip({
   mouseOnToPopup: true,
   fadeOutTime:5,
@@ -100,3 +87,4 @@ $(select).data('powertip',function(){
 var duration_to_height = function (duration){
   return (duration * (17.45) / 30.0);
 };
+

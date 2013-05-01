@@ -1,21 +1,48 @@
 {% extends "main.html" %}
 
-{% block title %}Register a new user{% endblock %}
+{% block title %}Register a new user{% endblock title %}
 
 {% block maincontent %}
+
 <h1>Register a new user</h1>
-<form class="form-signin" action="/signup" method="POST" onsubmit="return false;">
+<form class="form-signin" id = "signupForm" action="/signup" method="POST" onsubmit="return false;">
 <label for="username">Username</label>
-<input type="text" name="username" />
+<input type="text" id = "username" name="username" class="required"/>
 <label for="email">Email address</label>
-<input type="text" name="email" />
+<input type="text" id = "email" name="email" class ="required"/>
 <label for="password">Password</label>
-<input type="password" name="password" />
+<input type="password" id = "password" name="password" class = "required"/>
 <label for="name">Name</label>
-<input type="text" name="name" />
+<input type="text" name="name" id = "name" class="required"/>
 <label for="lastname">Last Name</label>
-<input type="text" name="lastname" />
-<input type="button" value="Create user" onclick="this.parentNode.submit();"/>
+<input type="text" name="lastname" id = "lastname" class="required"/>
+<input id = "btn" type="button" value="Create user" />
 </form>
 
-{% endblock %}
+{% endblock maincontent %}
+
+{% block script %}
+<script src="/js/jquery.validate.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#signupForm").validate({
+      rules:{
+        username: "required",
+        email: {
+          required: true,
+          email: true
+        },
+        password: "required",
+        name: "required",
+        lastname: "required"
+      }
+    });
+  });
+
+$('#btn').click(function() {
+  if ($("#signupForm").valid()){
+    this.parentNode.submit();
+  }
+});
+</script>
+{% endblock script %}
