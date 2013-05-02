@@ -201,10 +201,10 @@ textarea {
     background-color: rgb(90, 160, 230);
 }
 .open {
-    background-color: rgb(230, 90, 90);
+    background-color: rgb(112, 230, 90);
 }
 .closed {
-    background-color: rgb(112, 230, 90);
+    background-color: rgb(230, 90, 90);
 }
 .dayItem {
     top: 56px;

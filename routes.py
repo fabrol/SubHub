@@ -13,7 +13,9 @@ _routes = [
     RedirectRoute('/authenticated', BaseHandlers.AuthenticatedHandler, name='authenticated',strict_slash=True),
     RedirectRoute('/getshifts', handlers.GetShiftsHandler, name='getshifts',strict_slash=True),
    RedirectRoute('/getshiftsbyuser', handlers.GetShiftsByUserHandler, name='getshiftsbyuser',strict_slash=True),
-    RedirectRoute('/getuser', handlers.GetCurrentUser, name='getcurrentuser',strict_slash=True)
+    RedirectRoute('/getuser', handlers.GetCurrentUser, name='getcurrentuser',strict_slash=True),
+   RedirectRoute('/requestsub', handlers.RequestSubHandler, name='requestsub',strict_slash=True),
+   RedirectRoute('/claimsub', handlers.ClaimSubHandler, name='claimsub',strict_slash=True)
 
 ]
 def get_routes():

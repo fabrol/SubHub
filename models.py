@@ -44,6 +44,7 @@ class User(webapp2_extras.appengine.auth.models.User):
 
 class Shift(ndb.Model):
     datetime = ndb.DateTimeProperty(required=True)
+    endtime = ndb.DateTimeProperty(required=True)
     user = ndb.KeyProperty(kind=User, required=True)
     sub = ndb.KeyProperty(kind=User,default=None)
     duration = ndb.IntegerProperty(required=True)

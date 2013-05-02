@@ -1,5 +1,6 @@
 from google.appengine.ext.webapp import template
 from google.appengine.ext import ndb
+from google.appengine.api import mail
 
 import logging
 import os.path
@@ -13,6 +14,7 @@ from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
 from models import *
 from BaseHandlers import *
+import datetime
 
 
 '''
@@ -74,7 +76,48 @@ class GetShiftsByUserHandler(BaseHandler):
     self.response.out.write(response)
 
 
+class  RequestSubHandler(BaseHandler):
+    '''
+    Send email to users about new open shift. Email includes link for claiming/viewing
+    '''
+    
+    @user_required
+    def post(self):
 
+        response = json.loads(self.request.body)
+        user = self.user
+        sender_address = "newshift@submyshift.appspotmail.com"
+        subject = response['shift']['datetime'] 
+        body = "here is a sample body"
+    
+        u = User.query()
+        for recipient in u:
+            if recipient.email_address is not user.email_address:
+                print recipient.email_address
+                mail.send_mail(sender_address, '<'+recipient.email_address+'>', subject,body) 
+        ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
+        print ourdatetime
+        q = Shift.query()
+        curShift = q.filter((Shift.datetime == ourdatetime)).fetch(1)
+        curShift[0].status = "closed"
+        curShift[0].put()
 
-
-
+class ClaimSubHandler(BaseHandler):
+    '''
+    Handle claims for subbing shifts. E-mail the original user about the claim
+    '''
+    
+    @user_required
+    def post(self):
+        sub = self.shift.sub
+        user = self.user
+        user_address = user.e-mail_address
+        if not mail.is_emailvalid(user_address):
+            print "hello"#email address not valid?
+        else:
+            sender_address = "claimedshift@submyshift.appspotmail.com"
+            subject = sub.name + " has claimed your shift!"
+            body = """ MESSAGE BODY YO """
+            mail.send_mail(sender_address, user_address, subject, body)
+        
+      

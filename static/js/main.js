@@ -68,6 +68,7 @@ $(document).ready(function() {
       if (user.email_address == myUser){
         $("#timeTable-2").append(selector)
       }
+      
       if (status == 'normal') { 
         var $dialog = $('<div></div>')
           .html('You can ask for a sub here!')
@@ -78,6 +79,17 @@ $(document).ready(function() {
             buttons: {
               "Request Sub": function() {
                 //send request to server
+                $.ajax({
+                  type:"POST",
+                  url:"/requestsub",
+                  contentType: 'application/json; charset=utf-8',
+                  data: JSON.stringify({'user':myUser,'shift':shift}),
+                  dataType: "json",
+                  async: false,
+                  success: function() {
+                    alert ("sent request");
+                  }
+                });
               }
             }
           });
@@ -92,7 +104,12 @@ $(document).ready(function() {
             buttons: {
               "Cover Shift": function() {
                 //send request to server
-
+                $.ajax({
+                  type:"POST",
+                  url:"/claimsub",
+                  data: JSON.stringify(),
+                  dataType: "json"
+                });
               }
             }
           });
