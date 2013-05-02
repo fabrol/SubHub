@@ -92,13 +92,20 @@ class RequestSubHandler(BaseHandler):
         sender_address = "newshift@submyshift.appspotmail.com"
         subject = repr(response['shift']['datetime'])
         body = "here is a sample body"
+
+        # ADD ENCRYPTION FOR SENDING INFO
     
         u = User.query()
         for recipient in u:
             if recipient.email_address is not user.email_address:
                 viewlink = self.uri_for('authenticated',user_id=recipient.get_id(),_full=True)
+                claim_url = self.uri_for('claim', user_email=recipient.email_address,
+                date_time=response['shift']['datetime'], _full=True)
+                print claim_url
                 mybody = """A new shift has opened up!
-                click here to view - %s""" % (viewlink)
+                click here to view - %s 
+                click here to claim - %s
+                """ % (viewlink, claim_url)
                 print mybody
                 mail.send_mail(sender_address, '<'+recipient.email_address+'>', subject, mybody) 
         ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
@@ -107,14 +114,32 @@ class RequestSubHandler(BaseHandler):
         curShift[0].status = "open"
         curShift[0].put()
         self.response.set_status(200)
-        
         ### FIX RESPONSEE!!!!!
-        self.response.out.write("Worked!")
+        self.response.out.write(json.dumps('{success:true}'))
 
-class ClaimSubEmailHandler:
+class ClaimSubEmailHandler(BaseHandler):
   '''
   Handles direct link from email to take sub
   '''
+  @user_required
+  def get(self):
+    user = None
+    print 
+    user_email_address = self.request.get('user_email')
+    shift_datetime = self.request.get('date_time')
+    
+    print user_email_address, shift_datetime
+    
+    ourdatetime = datetime.datetime.strptime(shift_datetime,'%Y-%m-%dT%H:%M:%S')
+    curShift = Shift.query().filter(Shift.datetime == ourdatetime).fetch(1)
+    
+    if curShift[0].status != 'open':
+        print 'handle the shift already taken'
+    else:
+        userTakingShift = User.query().filter(User.email_address==user_email_address).fetch(1)[0]
+        curShift[0].status = "closed"
+        curShift[0].sub = userTakingShift.key
+        curShift[0].put()
 
 class ClaimSubHandler(BaseHandler):
     '''

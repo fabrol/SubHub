@@ -88,13 +88,12 @@ $(document).ready(function() {
                   dataType: "json",
                   context: that,
                   async: false,
-                  success: function() {
-                    // NOT GETTING HERE!!!!
+                  success: function(response,text) {
                     console.log("CAME BACK");
-                    alert ("sent request");
+                    alert ("Request for sub sent");
                      $( this ).dialog( "close" );
-                  },
-
+                     window.location.reload(true);
+                  }
                 });
               }
             }
