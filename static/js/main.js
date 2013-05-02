@@ -79,16 +79,22 @@ $(document).ready(function() {
             buttons: {
               "Request Sub": function() {
                 //send request to server
+                var that = $(this);
                 $.ajax({
                   type:"POST",
                   url:"/requestsub",
                   contentType: 'application/json; charset=utf-8',
                   data: JSON.stringify({'user':myUser,'shift':shift}),
                   dataType: "json",
+                  context: that,
                   async: false,
                   success: function() {
+                    // NOT GETTING HERE!!!!
+                    console.log("CAME BACK");
                     alert ("sent request");
-                  }
+                     $( this ).dialog( "close" );
+                  },
+
                 });
               }
             }
@@ -107,8 +113,13 @@ $(document).ready(function() {
                 $.ajax({
                   type:"POST",
                   url:"/claimsub",
-                  data: JSON.stringify(),
-                  dataType: "json"
+                  contentType: 'application/json; charset=utf-8',
+                  data: JSON.stringify({'user':myUser,'shift':shift}),
+                  dataType: "json",
+                  async: false,
+                  success: function() {
+                    alert ("sent request");
+                  }
                 });
               }
             }

@@ -32,7 +32,10 @@ def shifts_to_dict(shifts):
     user = shift.user.get().to_dict()
     vals = {}
     vals['datetime']=shift.datetime
-    vals['sub']=shift.sub.get().to_dict()
+    if shift.sub:
+      vals['sub']=shift.sub.get().to_dict()
+    else:
+      vals['sub']='NONE'
     vals['duration']=shift.duration
     vals['status']=shift.status
     vals['user']=user
@@ -76,7 +79,7 @@ class GetShiftsByUserHandler(BaseHandler):
     self.response.out.write(response)
 
 
-class  RequestSubHandler(BaseHandler):
+class RequestSubHandler(BaseHandler):
     '''
     Send email to users about new open shift. Email includes link for claiming/viewing
     '''
@@ -87,20 +90,31 @@ class  RequestSubHandler(BaseHandler):
         response = json.loads(self.request.body)
         user = self.user
         sender_address = "newshift@submyshift.appspotmail.com"
-        subject = response['shift']['datetime'] 
+        subject = repr(response['shift']['datetime'])
         body = "here is a sample body"
     
         u = User.query()
         for recipient in u:
             if recipient.email_address is not user.email_address:
-                print recipient.email_address
-                mail.send_mail(sender_address, '<'+recipient.email_address+'>', subject,body) 
+                viewlink = self.uri_for('authenticated',user_id=recipient.get_id(),_full=True)
+                mybody = """A new shift has opened up!
+                click here to view - %s""" % (viewlink)
+                print mybody
+                mail.send_mail(sender_address, '<'+recipient.email_address+'>', subject, mybody) 
         ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
-        print ourdatetime
         q = Shift.query()
         curShift = q.filter((Shift.datetime == ourdatetime)).fetch(1)
-        curShift[0].status = "closed"
+        curShift[0].status = "open"
         curShift[0].put()
+        self.response.set_status(200)
+        
+        ### FIX RESPONSEE!!!!!
+        self.response.out.write("Worked!")
+
+class ClaimSubEmailHandler:
+  '''
+  Handles direct link from email to take sub
+  '''
 
 class ClaimSubHandler(BaseHandler):
     '''
@@ -109,15 +123,22 @@ class ClaimSubHandler(BaseHandler):
     
     @user_required
     def post(self):
-        sub = self.shift.sub
-        user = self.user
-        user_address = user.e-mail_address
-        if not mail.is_emailvalid(user_address):
-            print "hello"#email address not valid?
+        response = json.loads(self.request.body)
+        userTakingShift = self.user
+        #print response
+        ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
+        curShift = Shift.query().filter((Shift.datetime == ourdatetime)).fetch(1)
+        #print curShift[0].status
+
+        if curShift[0].status != 'open':
+          print 'Handle the shift already being taken'
         else:
-            sender_address = "claimedshift@submyshift.appspotmail.com"
-            subject = sub.name + " has claimed your shift!"
-            body = """ MESSAGE BODY YO """
-            mail.send_mail(sender_address, user_address, subject, body)
+          curShift[0].status = "closed"
+          sub = User.query().filter(User.email_address==userTakingShift.email_address).fetch(1)[0]
+          curShift[0].sub = sub.key
+          curShift[0].put()
+          sender_address = "claimedshift@submyshift.appspotmail.com"
+          subject = userTakingShift.name + " " + userTakingShift.last_name + " has claimed your shift!"
+          body = """ MESSAGE BODY YO """
+          mail.send_mail(sender_address, response['shift']['user']['email_address'], subject, body)
         
-      
