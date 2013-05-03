@@ -109,6 +109,7 @@ $(document).ready(function() {
             buttons: {
               "Cover Shift": function() {
                 //send request to server
+                var that = $(this);
                 $.ajax({
                   type:"POST",
                   url:"/claimsub",
@@ -116,8 +117,17 @@ $(document).ready(function() {
                   data: JSON.stringify({'user':myUser,'shift':shift}),
                   dataType: "json",
                   async: false,
-                  success: function() {
-                    alert ("sent request");
+                  context: that,
+                  success: function(data) {
+                    var result = jQuery.parseJSON(data)
+                    if (result.gotshift == 'true'){
+                      alert("Congrats! You got the shift!");
+                    }
+                    else{
+                      alert ("Sorry! Some already claimed the shift!");                                          
+                    }
+                    $( this ).dialog( "close" );
+                    window.location.reload(true);
                   }
                 });
               }
@@ -131,6 +141,7 @@ $(document).ready(function() {
             autoOpen: false,
             modal: true,
             title: 'Closed Shift',
+            var that = $(this);
             buttons: {
               Cancel: function() {
                 $(this).dialog("close");

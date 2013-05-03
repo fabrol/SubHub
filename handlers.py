@@ -114,7 +114,6 @@ class RequestSubHandler(BaseHandler):
         curShift[0].status = "open"
         curShift[0].put()
         self.response.set_status(200)
-        ### FIX RESPONSEE!!!!!
         self.response.out.write(json.dumps('{success:true}'))
 
 class ClaimSubEmailHandler(BaseHandler):
@@ -157,6 +156,8 @@ class ClaimSubHandler(BaseHandler):
 
         if curShift[0].status != 'open':
           print 'Handle the shift already being taken'
+          self.response.set_status(200)
+          self.response.out.write(json.dumps('{success:true,gotshift:false}'))
         else:
           curShift[0].status = "closed"
           sub = User.query().filter(User.email_address==userTakingShift.email_address).fetch(1)[0]
@@ -166,4 +167,5 @@ class ClaimSubHandler(BaseHandler):
           subject = userTakingShift.name + " " + userTakingShift.last_name + " has claimed your shift!"
           body = """ MESSAGE BODY YO """
           mail.send_mail(sender_address, response['shift']['user']['email_address'], subject, body)
-        
+          self.response.set_status(200)
+          self.response.out.write(json.dumps('{"success":"true","gotshift":"true"}'))
