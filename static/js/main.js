@@ -141,8 +141,8 @@ $(document).ready(function() {
             autoOpen: false,
             modal: true,
             title: 'Closed Shift',
-            var that = $(this);
             buttons: {
+              
               Cancel: function() {
                 $(this).dialog("close");
               }
