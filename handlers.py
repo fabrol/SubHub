@@ -134,11 +134,14 @@ class ClaimSubEmailHandler(BaseHandler):
     
     if curShift[0].status != 'open':
         print 'handle the shift already taken'
+        self.redirect(self.uri_for('authenticated'))
+
     else:
         userTakingShift = User.query().filter(User.email_address==user_email_address).fetch(1)[0]
         curShift[0].status = "closed"
         curShift[0].sub = userTakingShift.key
         curShift[0].put()
+        self.redirect(self.uri_for('authenticated'))
 
 class ClaimSubHandler(BaseHandler):
     '''
