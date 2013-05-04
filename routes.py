@@ -16,7 +16,9 @@ _routes = [
     RedirectRoute('/getuser', handlers.GetCurrentUser, name='getcurrentuser',strict_slash=True),
    RedirectRoute('/requestsub', handlers.RequestSubHandler, name='requestsub',strict_slash=True),
    RedirectRoute('/claimsub', handlers.ClaimSubHandler, name='claimsub',strict_slash=True),
-   RedirectRoute('/claimemail/', handlers.ClaimSubEmailHandler, name='claim', strict_slash=True)
+   RedirectRoute('/claimemail/', handlers.ClaimSubEmailHandler, name='claim', strict_slash=True),
+   RedirectRoute('/importcalendar/', handlers.ImportCalendarHandler, name='importcalendar', strict_slash=True),
+	 (handlers.decorator.callback_path, handlers.decorator.callback_handler()),
 ]
 def get_routes():
 	return _routes

@@ -15,6 +15,19 @@ from webapp2_extras.auth import InvalidPasswordError
 from models import *
 from BaseHandlers import *
 import datetime
+from apiclient.discovery import build
+from google.appengine.ext import webapp
+from oauth2client.appengine import OAuth2Decorator
+
+
+CLIENT_ID="1030576108060.apps.googleusercontent.com"
+CLIENT_SECRET="vOl0WwYYfDjEAml7_tNyN_2J"
+SCOPE="https://www.googleapis.com/auth/calendar"
+
+decorator = OAuth2Decorator(
+		  client_id=CLIENT_ID,client_secret=CLIENT_SECRET,scope=SCOPE)
+
+service = build('calendar', 'v3')
 
 
 '''
@@ -172,3 +185,19 @@ class ClaimSubHandler(BaseHandler):
           mail.send_mail(sender_address, response['shift']['user']['email_address'], subject, body)
           self.response.set_status(200)
           self.response.out.write(json.dumps('{"success":"true","gotshift":"true"}'))
+
+class ImportCalendarHandler(BaseHandler):
+	'''
+	Handles auth for google and importing a calendar
+	'''
+
+	@decorator.oauth_required
+	@user_required
+	def get(self):
+		http = decorator.http()
+		request = service.events().list(calendarId='primary')
+		response = request.execute(http=http)
+		self.display_message('got this response:   '+repr(response))
+
+
+
