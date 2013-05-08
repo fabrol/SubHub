@@ -181,14 +181,10 @@ class ClaimSubEmailHandler(BaseHandler):
   '''
   Handles direct link from email to take sub
   '''
-  @user_required
   def get(self):
     user = None
-    print 
     user_email_address = self.request.get('user_email')
     shift_datetime = self.request.get('date_time')
-    
-    print user_email_address, shift_datetime
     
     ourdatetime = datetime.datetime.strptime(shift_datetime,'%Y-%m-%dT%H:%M:%S')
     curShift = Shift.query().filter(Shift.datetime == ourdatetime).fetch(1)
