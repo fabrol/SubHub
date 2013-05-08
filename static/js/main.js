@@ -16,6 +16,8 @@ $(document).ready(function() {
   }
 
   $.getJSON('getshifts', function(data){
+    //parse all the shifts to their locations
+
     $.each(data.shifts, function(index, shift){
       var user = shift.user;
       var sub = shift.sub;
@@ -64,20 +66,27 @@ $(document).ready(function() {
         }
 
       }
+      //Add the My Shifts tab
       $("#grid").append(selector);        
-      if (user.email_address == myUser){
+      if ((user.email_address == myUser) || (sub.email_address == myUser)){
         $("#timeTable-2").append(selector)
       }
       
-      if (status == 'normal') { 
+      //Create popup dialogs for shifts
+
+      var createDialog = false;
+
+      //access to asking for sub only if your own shift
+      if ((status == 'normal') && (user.email_address == myUser)) {
+        createDialog = true;
         var $dialog = $('<div></div>')
-          .html('You can ask for a sub here!')
-          .dialog({
-            autoOpen: false,
-            modal: true,
-            title: 'Normal Shift',
-            buttons: {
-              "Request Sub": function() {
+        .html('You can ask for a sub here!')
+        .dialog({
+          autoOpen: false,
+          modal: true,
+          title: 'Normal Shift',
+          buttons: {
+            "Request Sub": function() {
                 //send request to server
                 var that = $(this);
                 $.ajax({
@@ -91,23 +100,24 @@ $(document).ready(function() {
                   success: function(response,text) {
                     console.log("CAME BACK");
                     alert ("Request for sub sent");
-                     $( this ).dialog( "close" );
-                     window.location.reload(true);
+                    $( this ).dialog( "close" );
+                    window.location.reload(true);
                   }
                 });
               }
             }
           });
       }
-      if (status == 'open') { 
+      else if (status == 'open') { 
+        createDialog = true;        
         var $dialog = $('<div></div>')
-          .html('Do you want to cover this shift?')
-          .dialog({
-            autoOpen: false,
-            modal: true,
-            title: 'Open Shift',
-            buttons: {
-              "Cover Shift": function() {
+        .html('Do you want to cover this shift?')
+        .dialog({
+          autoOpen: false,
+          modal: true,
+          title: 'Open Shift',
+          buttons: {
+            "Cover Shift": function() {
                 //send request to server
                 var that = $(this);
                 $.ajax({
@@ -133,38 +143,78 @@ $(document).ready(function() {
               }
             }
           });
-      }
-      if (status == 'closed') { 
-        var $dialog = $('<div></div>')
+}
+else if (status == 'closed') {
+  if (sub.email_address == myUser){
+          //Sub asking for Sub
+          createDialog = true;
+          var $dialog = $('<div></div>')
+          .html('Do you no longer want to cover this shift?')
+          .dialog({
+            autoOpen: false,
+            modal: true,
+            title: "Ask for new Sub!",
+            buttons: {
+              "Ask for a new Sub": function(){
+                //send request to server
+                var that = $(this);
+                $.ajax({
+                  type:"POST",
+                  url:"/requestsfsub",
+                  contentType: 'application/json; charset=utf-8',
+                  data: JSON.stringify({'sub_user':myUser,'shift':shift}),
+                  dataType: "json",
+                  context: that,
+                  async: false,
+                  success: function(response,text) {
+                    console.log("CAME BACK");
+                    alert ("Request for new sub sent!");
+                    $( this ).dialog( "close" );
+                    window.location.reload(true);
+                  }
+                });              
+              },
+              Cancel: function() {
+                $(this).dialog("close");
+              }
+            }
+          });
+        } 
+        else{  
+          createDialog = true;
+          var $dialog = $('<div></div>')
           .html('This shift has been covered')
           .dialog({
             autoOpen: false,
             modal: true,
             title: 'Closed Shift',
             buttons: {
-              
+
               Cancel: function() {
                 $(this).dialog("close");
               }
             }
           });
+        }
       }
-        $(select).click(function(){
+
+      if (createDialog == true)
+        {        $(select).click(function(){
           $.powerTip.hide();
           $dialog.dialog("open");
-          });
-
-      $(select).powerTip({
-        mouseOnToPopup: true,
-        fadeOutTime:5,
-        placement:'e'
-      });
-      console.log(user);
-      $(select).data('powertip',function(){
-
-        return user.name +' ' + user.last_name+' <br>Sub: ' + sub.name + '<br>Hours: ' + hour + ':'+ min + '<br>Status: ' + status;
-      });
+        });
+    }
+    $(select).powerTip({
+      mouseOnToPopup: true,
+      fadeOutTime:5,
+      placement:'e'
     });
+    console.log(user);
+    $(select).data('powertip',function(){
+
+      return user.name +' ' + user.last_name+' <br>Sub: ' + sub.name + '<br>Hours: ' + hour + ':'+ min + '<br>Status: ' + status;
+    });
+  });
 });
 
 });
