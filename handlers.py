@@ -27,8 +27,6 @@ SCOPE="https://www.googleapis.com/auth/calendar"
 decorator = OAuth2Decorator(
 		  client_id=CLIENT_ID,client_secret=CLIENT_SECRET,scope=SCOPE)
 
-#service = build('calendar', 'v3')
-
 
 '''
 Function to serialize arbitrary objects to their json representation
@@ -45,6 +43,7 @@ def shifts_to_dict(shifts):
     user = shift.user.get().to_dict()
     vals = {}
     vals['datetime']=shift.datetime
+    vals['endtime']=shift.endtime
     if shift.sub:
       vals['sub']=shift.sub.get().to_dict()
     else:
@@ -169,6 +168,15 @@ class RequestSubofSubHandler(BaseHandler):
         self.response.out.write(json.dumps('{success:true}'))
 
 
+def UpdateSubForSelf(shift):
+  if (shift.sub == shift.user):
+    shift.sub = None
+    shift.status = "normal"
+    shift.put()
+    return True
+  else:
+    return False
+
 class ClaimSubEmailHandler(BaseHandler):
   '''
   Handles direct link from email to take sub
@@ -187,6 +195,7 @@ class ClaimSubEmailHandler(BaseHandler):
     
     if curShift[0].status != 'open':
         print 'handle the shift already taken'
+        UpdateSubForSelf(curShift[0])
         self.redirect(self.uri_for('authenticated'))
 
     else:
@@ -194,6 +203,7 @@ class ClaimSubEmailHandler(BaseHandler):
         curShift[0].status = "closed"
         curShift[0].sub = userTakingShift.key
         curShift[0].put()
+        UpdateSubForSelf(curShift[0])
         self.redirect(self.uri_for('authenticated'))
 
 class ClaimSubHandler(BaseHandler):
@@ -212,6 +222,7 @@ class ClaimSubHandler(BaseHandler):
 
         if curShift[0].status != 'open':
           print 'Handle the shift already being taken'
+          UpdateSubForSelf(curShift[0])
           self.response.set_status(200)
           self.response.out.write(json.dumps('{success:true,gotshift:false}'))
         else:
@@ -219,6 +230,9 @@ class ClaimSubHandler(BaseHandler):
           sub = User.query().filter(User.email_address==userTakingShift.email_address).fetch(1)[0]
           curShift[0].sub = sub.key
           curShift[0].put()
+
+          #if same user took it, don't send him email - or actually - do.
+          UpdateSubForSelf(curShift[0])
           sender_address = "claimedshift@submyshift.appspotmail.com"
           subject = userTakingShift.name + " " + userTakingShift.last_name + " has claimed your shift!"
           body = """ MESSAGE BODY YO """
@@ -227,17 +241,15 @@ class ClaimSubHandler(BaseHandler):
           self.response.out.write(json.dumps('{"success":"true","gotshift":"true"}'))
 
 class ImportCalendarHandler(BaseHandler):
-	'''
-	Handles auth for google and importing a calendar
-	'''
+  '''
+  Handles auth for google calendar importing
+  '''
 
-	@decorator.oauth_required
-	@user_required
-	def get(self):
-		http = decorator.http()
-		request = service.events().list(calendarId='primary')
-		response = request.execute(http=http)
-		self.display_message('got this response:   '+repr(response))
-
-
-
+  @decorator.oauth_required
+  @user_required
+  def get(self):
+    service = build('calendar','v3')
+    http = decorator.http()
+    request = service.events().list(calendarId='primary')
+    response = request.execute(http=http)
+    self.display_message('got this response:   '+repr(response))
