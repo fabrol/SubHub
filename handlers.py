@@ -246,6 +246,28 @@ class ImportCalendarHandler(BaseHandler):
   def get(self):
     service = build('calendar','v3')
     http = decorator.http()
-    request = service.events().list(calendarId='primary')
-    response = request.execute(http=http)
-    self.display_message('got this response:   '+repr(response))
+    request = service.calendarList().list()
+    allCalendars = request.execute(http =http)
+    myCal = None
+    for calendar in allCalendars['items']:
+      print calendar['summary']
+      if calendar['summary'] == 'SubHub':
+        myCal = calendar
+        break   
+    if not myCal:
+      self.display_message("AAAAHHH")
+    else:
+      # Found the calendar to import
+      request = service.events().list(calendarId=myCal['id'])
+      shifts = request.execute(http=http)
+      self.display_message(shifts)
+
+      for shift in shifts['items']:
+        user_email = shift['summary']
+        starttime = datetime.datetime.strptime(shift['start']['dateTime'],'%Y-%m-%dT%H:%M:%S-04:00')
+        endtime = datetime.datetime.strptime(shift['end']['dateTime'],'%Y-%m-%dT%H:%M:%S-04:00')
+        diff = endtime - starttime
+        duration = (diff.seconds/60)
+        cur_user = User.query().filter(User.email_address==user_email).fetch(1)
+        newEntry = Shift(sub=None,duration=duration,status="normal", datetime=starttime, user=cur_user[0].key, endtime=endtime)
+        newEntry.put()
