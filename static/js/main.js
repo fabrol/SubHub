@@ -51,6 +51,9 @@ $(document).ready(function() {
     params = $.parseJSON(vars[0]);
     $('#datepicker').datepicker("setDate",new Date(params['year'],params['month'],params['day']));
    }
+   else{
+    $('#datepicker').datepicker("setDate",new Date());
+   }
 /*
   $.getJSON('getshifts', vars, function(data){
     //parse all the shifts to their locations
