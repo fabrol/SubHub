@@ -71,50 +71,51 @@ class GetShiftsHandler(BaseHandler):
   '''
   @user_required
   def get(self):
-
-
-
-    
-    date = datetime.now()
+    date = datetime.datetime.now()
     
     mondayDate = WeekStartDate(date.isocalendar()[0], date.isocalendar()[1])
-    print mondayDate
     sundayDate = WeekEndDate(mondayDate)
-    print sundayDate
 
     mondayofWeek = datetime.datetime.combine(mondayDate, datetime.time(0, 0))
     sundayofWeek = datetime.datetime.combine(sundayDate, datetime.time(23, 0))
     s = Shift.query()
     s = s.filter(Shift.datetime > mondayofWeek)
     s = s.filter(Shift.datetime < sundayofWeek)
-    print mondayofWeek
-    print sundayofWeek
     result = shifts_to_dict(s)
-    print result
     response=json.dumps(result, default=json_object_serializer)
     self.response.out.write(response)
   
   @user_required
   def post(self):
-    response = json.loads(self.request.body)
-    date = datetime.date(response['year'], response['month'] + 1, response['day'])
+    if not self.request.body:
+      date = datetime.datetime.now()
     
-    mondayDate = WeekStartDate(date.isocalendar()[0], date.isocalendar()[1])
-    print mondayDate
-    sundayDate = WeekEndDate(mondayDate)
-    print sundayDate
+      mondayDate = WeekStartDate(date.isocalendar()[0], date.isocalendar()[1])
+      sundayDate = WeekEndDate(mondayDate)
 
-    mondayofWeek = datetime.datetime.combine(mondayDate, datetime.time(0, 0))
-    sundayofWeek = datetime.datetime.combine(sundayDate, datetime.time(23, 0))
-    s = Shift.query()
-    s = s.filter(Shift.datetime > mondayofWeek)
-    s = s.filter(Shift.datetime < sundayofWeek)
-    print mondayofWeek
-    print sundayofWeek
-    result = shifts_to_dict(s)
-    print result
-    response=json.dumps(result, default=json_object_serializer)
-    self.response.out.write(response)
+      mondayofWeek = datetime.datetime.combine(mondayDate, datetime.time(0, 0))
+      sundayofWeek = datetime.datetime.combine(sundayDate, datetime.time(23, 0))
+      s = Shift.query()
+      s = s.filter(Shift.datetime > mondayofWeek)
+      s = s.filter(Shift.datetime < sundayofWeek)
+      result = shifts_to_dict(s)
+      response=json.dumps(result, default=json_object_serializer)
+      self.response.out.write(response)
+    else:
+      response = json.loads(self.request.body)
+      date = datetime.date(response['year'], response['month'] + 1, response['day'])
+      
+      mondayDate = WeekStartDate(date.isocalendar()[0], date.isocalendar()[1])
+      sundayDate = WeekEndDate(mondayDate)
+
+      mondayofWeek = datetime.datetime.combine(mondayDate, datetime.time(0, 0))
+      sundayofWeek = datetime.datetime.combine(sundayDate, datetime.time(23, 0))
+      s = Shift.query()
+      s = s.filter(Shift.datetime > mondayofWeek)
+      s = s.filter(Shift.datetime < sundayofWeek)
+      result = shifts_to_dict(s)
+      response=json.dumps(result, default=json_object_serializer)
+      self.response.out.write(response)
 
 class GetShiftsByUserHandler(BaseHandler):
   '''
@@ -128,7 +129,6 @@ class GetShiftsByUserHandler(BaseHandler):
     result = shifts_to_dict(shifts)
     response=json.dumps(result, default=json_object_serializer)
     self.response.out.write(response)
-
 
 class RequestSubHandler(BaseHandler):
     '''
