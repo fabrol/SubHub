@@ -146,7 +146,6 @@ class RequestSubHandler(BaseHandler):
         body = ""
         logging.info('Sub request sent by %s', user.email_address)
         subject = repr(response['shift']['datetime'])
-        body = "here is a sample body"
 
         # ADD ENCRYPTION FOR SENDING INFO
     
