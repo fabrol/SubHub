@@ -71,10 +71,49 @@ class GetShiftsHandler(BaseHandler):
   '''
   @user_required
   def get(self):
+
+
+
+    
+    date = datetime.now()
+    
+    mondayDate = WeekStartDate(date.isocalendar()[0], date.isocalendar()[1])
+    print mondayDate
+    sundayDate = WeekEndDate(mondayDate)
+    print sundayDate
+
+    mondayofWeek = datetime.datetime.combine(mondayDate, datetime.time(0, 0))
+    sundayofWeek = datetime.datetime.combine(sundayDate, datetime.time(23, 0))
     s = Shift.query()
+    s = s.filter(Shift.datetime > mondayofWeek)
+    s = s.filter(Shift.datetime < sundayofWeek)
+    print mondayofWeek
+    print sundayofWeek
     result = shifts_to_dict(s)
+    print result
     response=json.dumps(result, default=json_object_serializer)
-    #self.response.headers.add_header('content-type', 'application/json', charset='utf-8')
+    self.response.out.write(response)
+  
+  @user_required
+  def post(self):
+    response = json.loads(self.request.body)
+    date = datetime.date(response['year'], response['month'] + 1, response['day'])
+    
+    mondayDate = WeekStartDate(date.isocalendar()[0], date.isocalendar()[1])
+    print mondayDate
+    sundayDate = WeekEndDate(mondayDate)
+    print sundayDate
+
+    mondayofWeek = datetime.datetime.combine(mondayDate, datetime.time(0, 0))
+    sundayofWeek = datetime.datetime.combine(sundayDate, datetime.time(23, 0))
+    s = Shift.query()
+    s = s.filter(Shift.datetime > mondayofWeek)
+    s = s.filter(Shift.datetime < sundayofWeek)
+    print mondayofWeek
+    print sundayofWeek
+    result = shifts_to_dict(s)
+    print result
+    response=json.dumps(result, default=json_object_serializer)
     self.response.out.write(response)
 
 class GetShiftsByUserHandler(BaseHandler):
@@ -167,6 +206,17 @@ class RequestSubofSubHandler(BaseHandler):
         self.response.set_status(200)
         self.response.out.write(json.dumps('{success:true}'))
 
+def WeekStartDate(year, week):
+  d = datetime.date(year, 1, 1)
+  delta_days = d.isoweekday() - 1
+  delta_weeks = week
+  if year == d.isocalendar()[0]:
+    delta_weeks -=1
+  delta = datetime.timedelta(days=-delta_days, weeks=delta_weeks)
+  return d + delta
+def WeekEndDate(monday):
+  delta_sunday = datetime.timedelta(days=6)
+  return monday + delta_sunday
 
 def UpdateSubForSelf(shift):
   if (shift.sub == shift.user):

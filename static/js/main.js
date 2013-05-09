@@ -15,12 +15,58 @@ $(document).ready(function() {
     $("#grid").append(selector);
   }
 
+  $('#datepicker').datepicker({
+    showOtherMonths:true,
+    selectOtherMonths:true,
+    dateformat: 'yy-mm-dd'
+  });
+
   $.getJSON('getshifts', function(data){
     //parse all the shifts to their locations
     renderShifts(data,myUser)
 
 });
 });
+
+var duration_to_height = function (duration){
+  return (duration * (17.45) / 30.0);
+};
+
+function getDate() {
+    var myUser;
+    $.getJSON('getuser', function(data){
+    myUser = data.email_address
+    });
+    var entered = $('#datepicker').datepicker("getDate");
+    var date = new Date(entered);
+    var month = date.getMonth();
+    var day = date.getDate();
+    var year = date.getFullYear();
+    console.log(month);
+    console.log(day);
+    console.log(year);
+    $.ajax({
+      type:"POST",
+      url:"/getshifts",
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({'month':month,'day':day, 'year':year}),
+      dataType: "json",
+      async: false,
+      success: function(response,text, myUser) {
+          console.log("CAME BACK");
+          console.log(response);
+          $('.shift').remove();
+
+    //parse all the shifts to their locations
+          renderShifts(response,myUser);
+
+
+
+       }
+     });
+
+    };
+
 
 var duration_to_height = function (duration){
   return (duration * (17.45) / 30.0);
