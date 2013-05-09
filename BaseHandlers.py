@@ -20,9 +20,9 @@ def user_required(handler):
   def check_login(self, *args, **kwargs):
     auth = self.auth
     if not auth.get_user_by_session():
-      #next_url = self.request.url
-      #login_url = '%s?next=%s' % (self.uri_for('login'), next_url)
-      self.redirect(self.uri_for('login'), abort=True)
+      next_url = self.request.url
+      login_url = '%s?next=%s' % (self.uri_for('login'), next_url)
+      self.redirect(login_url, abort=True)
     else:
       return handler(self, *args, **kwargs)
   return check_login
@@ -240,7 +240,8 @@ class LoginHandler(BaseHandler):
     try:
       u = self.auth.get_user_by_password(username, password, remember=True,
         save_session=True)
-      self.redirect(self.uri_for('authenticated'))
+      #self.redirect(self.uri_for('authenticated'))
+      self.redirect(str(self.request.get('txtUrl')))
     except (InvalidAuthIdError, InvalidPasswordError) as e:
       logging.info('Login failed for user %s because of %s', username, type(e))
       self._serve_page(True)

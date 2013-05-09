@@ -15,11 +15,16 @@
 	<input type="text" value="{{ username }}" name="username"/>
 	<label for="password">Password</label>
 	<input type="password" name="password"/>
+  <input type="hidden" id="txtUrl" name="txtUrl" value="" />
 	<button type="submit" class="btn">Login</button>
   <a href="/forgot">Forgot password</a>
 
 </form>
+<script type="text/javascript">
 
-
+var q = document.URL.split('next=')[1];
+console.log(q);
+document.getElementById('txtUrl').value = q;
+</script>
 
 {% endblock %}
