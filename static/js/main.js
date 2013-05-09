@@ -1,8 +1,13 @@
 $(document).ready(function() {
   var myUser;
-  $.getJSON('getuser', function(data){
-    myUser = data.email_address
-  });
+  $.ajax({
+      dataType: "json",
+      url: 'getuser',
+      async: false,
+      success: function(data){
+        myUser = data.email_address;
+      }
+    });
 
   //Add the tabs
   $( "#tabs" ).tabs();
@@ -160,6 +165,7 @@ var renderShifts = function(data, myUser){
 
       var createDialog = false;
 
+      console.log(myUser);
       //access to asking for sub only if your own shift
       if ((status == 'normal') && (user.email_address == myUser)) {
         createDialog = true;
