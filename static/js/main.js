@@ -24,6 +24,41 @@ $(document).ready(function() {
   $('#datepicker').datepicker({
     showOtherMonths:true,
     selectOtherMonths:true,
+    onSelect: function() {
+
+  var curUser;
+  $.ajax({
+    dataType: "json",
+    url: 'getuser',
+    async: false,
+    success: function(data){
+      curUser = data.email_address;
+    }
+  });
+
+  var entered = $('#datepicker').datepicker("getDate");
+  var date = new Date(entered);
+  var month = date.getMonth();
+  var day = date.getDate();
+  var year = date.getFullYear();
+  $.ajax({
+    type:"POST",
+    url:"/getshifts",
+    contentType: 'application/json; charset=utf-8',
+    data: JSON.stringify({'month':month,'day':day, 'year':year}),
+    dataType: "json",
+    async: false,
+    success: function(response) {
+      $('.shift').remove();
+      console.log("response is ");
+    //parse all the shifts to their locations
+    renderShifts(response,curUser);
+
+  }
+});
+  $('#datepicker').datepicker("hide");
+
+    },
     dateformat: 'yy-mm-dd'
   });
 
@@ -63,40 +98,6 @@ var duration_to_height = function (duration){
   return (duration * (17.45) / 30.0);
 };
 
-//changes the views between weeks
-function getDate() {
-  var curUser;
-  $.ajax({
-    dataType: "json",
-    url: 'getuser',
-    async: false,
-    success: function(data){
-      curUser = data.email_address;
-    }
-  });
-
-  var entered = $('#datepicker').datepicker("getDate");
-  var date = new Date(entered);
-  var month = date.getMonth();
-  var day = date.getDate();
-  var year = date.getFullYear();
-  $.ajax({
-    type:"POST",
-    url:"/getshifts",
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify({'month':month,'day':day, 'year':year}),
-    dataType: "json",
-    async: false,
-    success: function(response) {
-      $('.shift').remove();
-      console.log("response is ");
-    //parse all the shifts to their locations
-    renderShifts(response,curUser);
-
-  }
-});
-
-};
 
 //Render all the shifts in data
 var renderShifts = function(data, myUser){
