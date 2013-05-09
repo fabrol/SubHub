@@ -137,7 +137,6 @@ class RequestSubHandler(BaseHandler):
     
     @user_required
     def post(self):
-
         response = json.loads(self.request.body)
         user = self.user
         sender_address = "newshift@submyshift.appspotmail.com"
@@ -145,6 +144,9 @@ class RequestSubHandler(BaseHandler):
         s = '?cur_date_chosen={"month":%d,"day":%d,"year":%d}' %(ourdatetime.month-1,ourdatetime.day,ourdatetime.year)
         subject = str(ourdatetime.strftime("%A, %Y-%m-%d %H:%M:%S"))
         body = ""
+        logging.info('Sub request sent by %s', user.email_address)
+        subject = repr(response['shift']['datetime'])
+        body = "here is a sample body"
 
         # ADD ENCRYPTION FOR SENDING INFO
     
@@ -178,6 +180,7 @@ class RequestSubofSubHandler(BaseHandler):
         response = json.loads(self.request.body)
         #The current user is the one who has the sub
         cur_sub_user = self.user
+        logging.info( 'Another sub request sent for a shift subbed already by %s', cur_sub_user.email_address)
         sender_address = "newshift@submyshift.appspotmail.com"
         ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
         subject = str(ourdatetime.strftime("%A, %Y-%m-%d %H:%M:%S"))
@@ -235,8 +238,9 @@ class ClaimSubEmailHandler(BaseHandler):
   def get(self):
     user = None
     user_email_address = self.request.get('user_email')
+
     shift_datetime = self.request.get('date_time')
-    
+    logging.info('Sub claimed by  %s for shift', user_email_address, shift_datetime)
     ourdatetime = datetime.datetime.strptime(shift_datetime,'%Y-%m-%dT%H:%M:%S')
     curShift = Shift.query().filter(Shift.datetime == ourdatetime).fetch(1)
     
@@ -264,8 +268,8 @@ class ClaimSubHandler(BaseHandler):
     def post(self):
         response = json.loads(self.request.body)
         userTakingShift = self.user
-        #print response
         ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
+        logging.info('Sub claimed by %s for shift at %s', userTakingShift.email_address, ourdatetime)
         curShift = Shift.query().filter((Shift.datetime == ourdatetime)).fetch(1)
         #print curShift[0].status
 
@@ -297,6 +301,7 @@ class ImportCalendarHandler(BaseHandler):
   @decorator.oauth_required
   @user_required
   def get(self):
+    logging.info('Manager calendar imported')
     service = build('calendar','v3')
     http = decorator.http()
     request = service.calendarList().list()
