@@ -69,6 +69,16 @@ function getDate() {
 
 var renderShifts = function(data, myUser){
 
+});
+});
+
+var duration_to_height = function (duration){
+  return (duration * (17.45) / 30.0);
+};
+
+var renderShifts = function(data, myUser){
+
+
     $.each(data.shifts, function(index, shift){
       var user = shift.user;
       var sub = shift.sub;
