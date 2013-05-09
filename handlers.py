@@ -138,9 +138,9 @@ class RequestSubHandler(BaseHandler):
     @user_required
     def post(self):
         response = json.loads(self.request.body)
-        logging.info('Sub request sent by %s', user.email_address)
         user = self.user
         sender_address = "newshift@submyshift.appspotmail.com"
+        logging.info('Sub request sent by %s', user.email_address)
         subject = repr(response['shift']['datetime'])
         body = "here is a sample body"
 
@@ -174,11 +174,11 @@ class RequestSubofSubHandler(BaseHandler):
     
     @user_required
     def post(self):
-        logging.info( 'Another sub request sent for a shift subbed already by %s', user.email_address)
 
         response = json.loads(self.request.body)
         #The current user is the one who has the sub
         cur_sub_user = self.user
+        logging.info( 'Another sub request sent for a shift subbed already by %s', cur_sub_user.email_address)
         sender_address = "newshift@submyshift.appspotmail.com"
         subject = repr(response['shift']['datetime'])
         body = "here is a sample body"
