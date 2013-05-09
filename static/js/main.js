@@ -17,6 +17,17 @@ $(document).ready(function() {
 
   $.getJSON('getshifts', function(data){
     //parse all the shifts to their locations
+    renderShifts(data,myUser)
+
+});
+});
+
+var duration_to_height = function (duration){
+  return (duration * (17.45) / 30.0);
+};
+
+var renderShifts = function(data, myUser){
+
 
     $.each(data.shifts, function(index, shift){
       var user = shift.user;
@@ -218,12 +229,7 @@ else if (status == 'closed') {
 
       return user.name +' ' + user.last_name+' <br>Sub: ' + sub.name + '<br>Hours: ' + hour + ':'+ min + '-' + endhour + ':' + endmin + '<br>Status: ' + status;
     });
-  });
 });
 
-});
 
-var duration_to_height = function (duration){
-  return (duration * (17.45) / 30.0);
 };
-
