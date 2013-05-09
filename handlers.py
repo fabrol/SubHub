@@ -141,25 +141,25 @@ class RequestSubHandler(BaseHandler):
         response = json.loads(self.request.body)
         user = self.user
         sender_address = "newshift@submyshift.appspotmail.com"
-        subject = repr(response['shift']['datetime'])
-        body = "here is a sample body"
+        ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
+        s = '?cur_date_chosen={"month":%d,"day":%d,"year":%d}' %(ourdatetime.month-1,ourdatetime.day,ourdatetime.year)
+        subject = str(ourdatetime.strftime("%A, %Y-%m-%d %H:%M:%S"))
+        body = ""
 
         # ADD ENCRYPTION FOR SENDING INFO
     
         u = User.query()
         for recipient in u:
             if recipient.email_address is not user.email_address:
-                viewlink = self.uri_for('authenticated',user_id=recipient.get_id(),_full=True)
+                viewlink = self.uri_for('authenticated',_full=True)+s
                 claim_url = self.uri_for('claim', user_email=recipient.email_address,
                 date_time=response['shift']['datetime'], _full=True)
-                print claim_url
                 mybody = """A new shift has opened up!
-                click here to view - %s 
-                click here to claim - %s
+click here to view - %s 
+click here to claim - %s
                 """ % (viewlink, claim_url)
                 print mybody
                 mail.send_mail(sender_address, '<'+recipient.email_address+'>', subject, mybody) 
-        ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
         q = Shift.query()
         curShift = q.filter((Shift.datetime == ourdatetime)).fetch(1)
         curShift[0].status = "open"
@@ -179,15 +179,17 @@ class RequestSubofSubHandler(BaseHandler):
         #The current user is the one who has the sub
         cur_sub_user = self.user
         sender_address = "newshift@submyshift.appspotmail.com"
-        subject = repr(response['shift']['datetime'])
-        body = "here is a sample body"
+        ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
+        subject = str(ourdatetime.strftime("%A, %Y-%m-%d %H:%M:%S"))
+        s = '?cur_date_chosen={"month":%d,"day":%d,"year":%d}' %(ourdatetime.month-1,ourdatetime.day,ourdatetime.year)
+        body = ""
 
         # ADD ENCRYPTION FOR SENDING INFO
     
         u = User.query()
         for recipient in u:
             if recipient.email_address is not cur_sub_user.email_address:
-                viewlink = self.uri_for('authenticated',user_id=recipient.get_id(),_full=True)
+                viewlink = self.uri_for('authenticated',_full=True)+s
                 claim_url = self.uri_for('claim', user_email=recipient.email_address,
                 date_time=response['shift']['datetime'], _full=True)
                 print claim_url
@@ -197,7 +199,6 @@ class RequestSubofSubHandler(BaseHandler):
                 """ % (viewlink, claim_url)
                 print mybody
                 mail.send_mail(sender_address, '<'+recipient.email_address+'>', subject, mybody) 
-        ourdatetime = datetime.datetime.strptime(response['shift']['datetime'],'%Y-%m-%dT%H:%M:%S')
         q = Shift.query()
         curShift = q.filter((Shift.datetime == ourdatetime)).fetch(1)
         curShift[0].status = "open"
@@ -239,10 +240,12 @@ class ClaimSubEmailHandler(BaseHandler):
     ourdatetime = datetime.datetime.strptime(shift_datetime,'%Y-%m-%dT%H:%M:%S')
     curShift = Shift.query().filter(Shift.datetime == ourdatetime).fetch(1)
     
+    s = '?cur_date_chosen={"month":%d,"day":%d,"year":%d}' %(ourdatetime.month-1,ourdatetime.day,ourdatetime.year)
+    print s
     if curShift[0].status != 'open':
         print 'handle the shift already taken'
         UpdateSubForSelf(curShift[0])
-        self.redirect(self.uri_for('authenticated'))
+        self.redirect(self.uri_for('authenticated')+s)
 
     else:
         userTakingShift = User.query().filter(User.email_address==user_email_address).fetch(1)[0]
@@ -250,7 +253,7 @@ class ClaimSubEmailHandler(BaseHandler):
         curShift[0].sub = userTakingShift.key
         curShift[0].put()
         UpdateSubForSelf(curShift[0])
-        self.redirect(self.uri_for('authenticated'))
+        self.redirect(self.uri_for('authenticated')+s)
 
 class ClaimSubHandler(BaseHandler):
     '''
@@ -281,7 +284,7 @@ class ClaimSubHandler(BaseHandler):
           UpdateSubForSelf(curShift[0])
           sender_address = "claimedshift@submyshift.appspotmail.com"
           subject = userTakingShift.name + " " + userTakingShift.last_name + " has claimed your shift!"
-          body = """ MESSAGE BODY YO """
+          body = """ """
           mail.send_mail(sender_address, response['shift']['user']['email_address'], subject, body)
           self.response.set_status(200)
           self.response.out.write(json.dumps('{"success":"true","gotshift":"true"}'))
