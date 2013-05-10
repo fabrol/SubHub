@@ -1,11 +1,9 @@
 {% extends "main.html" %}
 
-{% block title %}Register a new user{% endblock title %}
-
 {% block maincontent %}
-
-<h1>Register a new user</h1>
+</br></br>
 <form class="form-signin" id = "signupForm" action="/signup" method="POST" onsubmit="return false;">
+<legend>Register a new user</legend>
 <label for="username">Username</label>
 <input type="text" id = "username" name="username" class="required"/>
 <label for="email">Email address</label>
