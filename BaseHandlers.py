@@ -1,6 +1,8 @@
 from google.appengine.ext.webapp import template
 from google.appengine.ext import ndb
 
+from google.appengine.api import mail
+
 import logging
 import os.path
 import webapp2
@@ -128,11 +130,12 @@ class SignupHandler(BaseHandler):
 
     verification_url = self.uri_for('verification', type='v', user_id=user_id,
       signup_token=token, _full=True)
-
-    msg = 'Send an email to user in order to verify their address. \
-          They will be able to do so by visiting <a href="{url}">{url}</a>'
-
-    self.display_message(msg.format(url=verification_url))
+    sender_address = "verifyemail@submyshift.appspotmail.com"
+    subject = "Verify your email for SubHub!"
+    to = email
+    mybody = 'Verify your email by clicking the link <a href="%s">Verify</a>'%(verification_url)
+    mail.send_mail(sender_address,'<'+to+'>', subject, mybody, html = mybody) 
+    self.display_message("Please check your email for a verification link!")
 
 class ForgotPasswordHandler(BaseHandler):
   def get(self):
@@ -237,11 +240,14 @@ class LoginHandler(BaseHandler):
   def post(self):
     username = self.request.get('username')
     password = self.request.get('password')
+    print self.request.get('txtUrl')
     try:
       u = self.auth.get_user_by_password(username, password, remember=True,
         save_session=True)
-      #self.redirect(self.uri_for('authenticated'))
-      self.redirect(str(self.request.get('txtUrl')))
+      if self.request.get('txtUrl') == 'undefined':
+        self.redirect(self.uri_for('authenticated'))
+      else:
+        self.redirect(str(self.request.get('txtUrl')))
     except (InvalidAuthIdError, InvalidPasswordError) as e:
       logging.info('Login failed for user %s because of %s', username, type(e))
       self._serve_page(True)

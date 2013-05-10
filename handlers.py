@@ -145,7 +145,6 @@ class RequestSubHandler(BaseHandler):
         subject = str(ourdatetime.strftime("%A, %Y-%m-%d %H:%M:%S"))
         body = ""
         logging.info('Sub request sent by %s', user.email_address)
-        subject = repr(response['shift']['datetime'])
 
         # ADD ENCRYPTION FOR SENDING INFO
     
@@ -156,11 +155,11 @@ class RequestSubHandler(BaseHandler):
                 claim_url = self.uri_for('claim', user_email=recipient.email_address,
                 date_time=response['shift']['datetime'], _full=True)
                 mybody = """A new shift has opened up!
-click here to view - %s 
-click here to claim - %s
+click here to view - <a href='%s'> View Shift </a> <br>
+click here to claim this shift - <a href='%s'> Claim Shift </a> 
                 """ % (viewlink, claim_url)
                 print mybody
-                mail.send_mail(sender_address, '<'+recipient.email_address+'>', subject, mybody) 
+                mail.send_mail(sender_address,'<'+recipient.email_address+'>', subject, mybody, html = mybody) 
         q = Shift.query()
         curShift = q.filter((Shift.datetime == ourdatetime)).fetch(1)
         curShift[0].status = "open"
@@ -317,7 +316,6 @@ class ImportCalendarHandler(BaseHandler):
       # Found the calendar to import
       request = service.events().list(calendarId=myCal['id'])
       shifts = request.execute(http=http)
-      self.display_message(shifts)
 
       for shift in shifts['items']:
         user_email = shift['summary']
@@ -326,5 +324,7 @@ class ImportCalendarHandler(BaseHandler):
         diff = endtime - starttime
         duration = (diff.seconds/60)
         cur_user = User.query().filter(User.email_address==user_email).fetch(1)
+        print user_email
         newEntry = Shift(sub=None,duration=duration,status="normal", datetime=starttime, user=cur_user[0].key, endtime=endtime)
         newEntry.put()
+    self.redirect(self.uri_for('authenticated'))

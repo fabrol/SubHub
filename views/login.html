@@ -1,9 +1,7 @@
 {% extends "main.html" %}
 
 {% block maincontent %}
-
-<h1>Login</h1>
-
+</br></br>
 {% if failed %}
 
     <strong>Login failed!</strong> Check your credentials and try again.
@@ -11,7 +9,8 @@
 {% endif %}
 
 <form class="form-signin" action= "/login" method="POST">
-	<label for="username">Username</label>
+	<legend>Login </legend>
+  <label for="username">Username</label>
 	<input type="text" value="{{ username }}" name="username"/>
 	<label for="password">Password</label>
 	<input type="password" name="password"/>
