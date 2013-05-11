@@ -11,6 +11,7 @@ class User(webapp2_extras.appengine.auth.models.User):
   email_address = ndb.StringProperty(required=True)
   name = ndb.StringProperty()
   last_name = ndb.StringProperty()
+  isManager = ndb.BooleanProperty(default=False)
 
   def set_password(self, raw_password):
     """Sets the password for the current user

@@ -299,32 +299,36 @@ class ImportCalendarHandler(BaseHandler):
   @decorator.oauth_required
   @user_required
   def get(self):
-    logging.info('Manager calendar imported')
-    service = build('calendar','v3')
-    http = decorator.http()
-    request = service.calendarList().list()
-    allCalendars = request.execute(http =http)
-    myCal = None
-    for calendar in allCalendars['items']:
-      print calendar['summary']
-      if calendar['summary'] == 'SubHub':
-        myCal = calendar
-        break   
-    if not myCal:
-      self.display_message("AAAAHHH")
-    else:
-      # Found the calendar to import
-      request = service.events().list(calendarId=myCal['id'])
-      shifts = request.execute(http=http)
+		manager = self.user
+		if not self.user.isManager:
+			self.display_message("Sorry, but you are not authorized to import calendars")	
+		else:
+			service = build('calendar','v3')
+			http = decorator.http()
+			request = service.calendarList().list()
+			allCalendars = request.execute(http =http)
+			myCal = None
+			for calendar in allCalendars['items']:
+				print calendar['summary']
+				if calendar['summary'] == 'SubHub':
+					myCal = calendar
+					break   
+			if not myCal:
+				self.display_message("Something went wrong! Try and correctly format the google calendar and try again!")
+			else:
+				# Found the calendar to import
+				request = service.events().list(calendarId=myCal['id'])
+				shifts = request.execute(http=http)
 
-      for shift in shifts['items']:
-        user_email = shift['summary']
-        starttime = datetime.datetime.strptime(shift['start']['dateTime'],'%Y-%m-%dT%H:%M:%S-04:00')
-        endtime = datetime.datetime.strptime(shift['end']['dateTime'],'%Y-%m-%dT%H:%M:%S-04:00')
-        diff = endtime - starttime
-        duration = (diff.seconds/60)
-        cur_user = User.query().filter(User.email_address==user_email).fetch(1)
-        print user_email
-        newEntry = Shift(sub=None,duration=duration,status="normal", datetime=starttime, user=cur_user[0].key, endtime=endtime)
-        newEntry.put()
-    self.redirect(self.uri_for('authenticated'))
+				for shift in shifts['items']:
+					user_email = shift['summary']
+					starttime = datetime.datetime.strptime(shift['start']['dateTime'],'%Y-%m-%dT%H:%M:%S-04:00')
+					endtime = datetime.datetime.strptime(shift['end']['dateTime'],'%Y-%m-%dT%H:%M:%S-04:00')
+					diff = endtime - starttime
+					duration = (diff.seconds/60)
+					cur_user = User.query().filter(User.email_address==user_email).fetch(1)
+					print user_email
+					newEntry = Shift(sub=None,duration=duration,status="normal", datetime=starttime, user=cur_user[0].key, endtime=endtime)
+					newEntry.put()
+			logging.info('Manager calendar imported')
+			self.redirect(self.uri_for('authenticated'))
