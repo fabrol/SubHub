@@ -47,7 +47,10 @@
               {% else %}
               <li> <a href="/logout">Logout</a></li> 
               <li class = "active"><a href="/authenticated">Calendar</a></li>
-              <li><a hred="/authenticated">Logged in as: {{ user.name }}!</a></li>
+              <li><a href="/authenticated">Logged in as: {{ user.name }}!</a></li>
+              {% if user.isManager %}
+              <li><a href="/managerview">Manager View</a></li>
+              {% endif %}
                {% endif %}
             </ul>
           </div><!--/.nav-collapse -->

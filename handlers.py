@@ -332,3 +332,41 @@ class ImportCalendarHandler(BaseHandler):
 					newEntry.put()
 			logging.info('Manager calendar imported')
 			self.redirect(self.uri_for('authenticated'))
+
+class ManagerViewHandler(BaseHandler):
+  @user_required
+  def get(self):  
+      self.render_template('managerview.html')
+
+class GetManagerShifts(BaseHandler):
+  '''
+  Handles the manager view
+  '''
+
+  @user_required
+  def post(self):
+    manager = self.user
+    if not self.user.isManager:
+      self.display_message("Sorry, but you are not authorized to import calendars") 
+    else:
+      # Show each user and with each user show the normal shifts, subbed shifts and subs asked for (maybe in a date range?)
+      u = User.query()
+      s = Shift.query()
+
+      result = {}
+      for user in u:
+        reg_shifts = 0
+        asked_sub_shifts = 0
+        subbing = 0
+        for shift in s.filter(Shift.user==user.key):
+          reg_shifts += 1
+          if shift.status == 'open':
+            asked_sub_shifts += 1
+        for shift in s.filter(Shift.sub==user.key):
+          subbing += 1
+        shifts = {'reg_shifts':reg_shifts,'asked_sub_shifts':asked_sub_shifts,'subbing':subbing}
+        #shifts = shifts_to_dict(s.filter(Shift.user == user.key))
+        result[user.email_address] = shifts
+      response=json.dumps(result, default=json_object_serializer)
+      self.response.out.write(response)
+
